@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Visitor Registration</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash">
+                    {% for category, message in messages %}
+                        {% if category == 'error' %}
+                            <div class="error-message">{{ message }}</div>
+                        {% else %}
+                            <div>{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('main.index') }}" method="POST">
+            {{ form.hidden_tag() }}  <!-- CSRF Token -->
+            <label for="entry_exit_entry">
+                <input type="radio" id="entry_exit_entry" name="entry_exit" value="Entry" onchange="toggleFields()" required>
+                Entry
+            </label>
+            <label for="entry_exit_exit">
+                <input type="radio" id="entry_exit_exit" name="entry_exit" value="Exit" onchange="toggleFields()" required>
+                Exit
+            </label>
+        
+            <!-- Entry Form Fields -->
+            <div id="entry_fields" style="display:block;">
+                <label for="visitor_name">Visitor Name:</label>
+                {{ form.visitor_name }}<br><br>
+        
+                <label for="flat_no">Flat No:</label>
+                {{ form.flat_no }}<br><br>
+        
+                <label for="resident_name">Resident Name:</label>
+                {{ form.resident_name }}<br><br>
+        
+                <label for="resident_contact">Resident Contact Number:</label>
+                {{ form.resident_contact }}<br><br>
+        
+                <label for="visitor_contact">Visitor Contact Number:</label>
+                {{ form.visitor_contact }}<br><br>
+        
+                <label for="purpose_of_visit">Purpose of Visit:</label>
+                {{ form.purpose_of_visit }}<br><br>
+        
+                <label for="num_guests">No. of Guests:</label>
+                {{ form.num_guests }}<br><br>
+        
+                <label for="date">Date:</label>
+                {{ form.date }}<br><br>
+            </div>
+        
+            <!-- Exit Form Fields -->
+            <div id="exit_fields" style="display:none;">
+                <label for="token">Enter Token (Exit):</label>
+                {{ form.token }}<br><br>
+            </div>
+        
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Display the generated token only after form submission -->
+        {% if token %}
+            <h3>Your unique token is: {{ token }}</h3>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleFields() {
+            var entryExitValue = document.querySelector('input[name="entry_exit"]:checked').value;
+            if (entryExitValue === 'Entry') {
+                document.getElementById('exit_fields').style.display = 'none';
+                document.getElementById('entry_fields').style.display = 'block';
+            } else if (entryExitValue === 'Exit') {
+                document.getElementById('entry_fields').style.display = 'none';
+                document.getElementById('exit_fields').style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>

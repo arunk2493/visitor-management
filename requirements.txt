@@ -1,0 +1,4 @@
+Flask==2.0.2
+Flask-Mail==0.9.1
+filelock==3.0.12
+python-dotenv==0.19.2
